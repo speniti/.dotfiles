@@ -1,0 +1,160 @@
+#!/usr/bin/env sh
+
+###> VARIABLES ###
+export DEFAULT_SSH_KEY="sp_rsa"
+export MYSQL_DATA_DIR="/tmp/mysql"
+
+export REPOPATH="/Users/simone.peniti/Docebo/Learn"
+export WANDHOME="$REPOPATH/local"
+export GITLAB_TOKEN="glpat-CMRDLJZhJXpyGKYXVNdm"
+
+export DURIN_AWS_SANDBOX_HASH=8j1svhh5la
+export BI_AWS_SANDBOX_HASH=4cju9n10jh
+export BI_AWS_REGION=eu-west-1
+###< variables ###
+
+### FUNCTIONS ###
+denv() {
+    usage="
+Shortcut for dev environment operations.
+
+    - Valid commands are 'down', 'start', 'stop', 'restart', 'resetdb', 'rebuild', 'up' (eg. denv start).
+
+Usage: denv COMMAND
+"
+
+    cmds=('down', 'start' 'stop' 'restart', 'resetdb', 'rebuild', 'up')
+
+    if [[ $# -ne 1 ]] || [[ ! ${cmds[@]} =~ "$1" ]]; then
+        echo $usage
+
+        return 1
+    fi
+
+    back=$(pwd)
+    cd $WANDHOME
+
+    if [[ "$1" = "up" ]]; then
+        ecr-login
+
+        wand docker-start
+
+        cd $back
+
+        return 0
+    fi
+
+    if [[ "$1" = "down" ]]; then
+        wand docker-remove
+
+        cd $back
+
+        return 0
+    fi
+
+    if [[ "$1" = "restart" ]]; then
+        wand docker-stop
+        wand docker-start
+
+        cd $back
+
+        return 0
+    fi
+
+    if [[ "$1" = "resetdb" ]]; then
+        wand import-db ./initial-data/mysql/hydra.sql && wand run-migrations
+
+        cd $back
+
+        return 0
+    fi
+
+    if [[ "$1" = "rebuild" ]]; then
+        ecr-login
+
+        wand docker-remove
+
+        docker-compose build --no-cache
+
+        wand docker-start
+
+        cd $back
+
+        return 0
+    fi
+
+    wand docker-$1
+
+    cd $back
+}
+
+
+dexec () {
+    usage="
+Shortcut for docker exec.
+
+    - Valid containers names are 'graphql', 'hydra', 'legacy', mysql', 'redis', 'domains' or 'nginx'.
+      Container name must be specified without the 'docebo_' prefix. (eg. hydra).
+
+Usage: dexec CONTAINER_NAME COMMAND ...ARGS (eg. dexec hydra composer install)
+"
+
+    containers=('graphql', 'hydra' 'legacy', 'mysql' 'nginx', 'domains', 'redis', 'bjv2_api_handler', 'bjv2_scheduler')
+
+    if [[ $# -lt 2 ]] || [[ ! ${containers[@]} =~ "$1" ]]; then
+        echo $usage
+
+        return 1
+    fi
+
+    docker exec -it docebo_$@
+}
+
+dcomposer() {
+    dexec hydra composer config --global gitlab-token.gitlab.com "$GITLAB_TOKEN"
+    dexec legacy composer config --global gitlab-token.gitlab.com "$GITLAB_TOKEN"
+    dexec domains composer config --global gitlab-token.gitlab.com "$GITLAB_TOKEN"
+    dexec bjv2_api_handler composer config --global gitlab-token.gitlab.com "$GITLAB_TOKEN"
+    dexec bjv2_scheduler composer config --global gitlab-token.gitlab.com "$GITLAB_TOKEN"
+
+    wand run-composer $@
+}
+
+ecr-login () {
+    token=$(aws ecr get-login-password --region us-east-1)
+    docker login --username AWS --password $token 426132435523.dkr.ecr.us-east-1.amazonaws.com
+}
+
+mkx509 () {
+    usage="
+Shortcut for generating a new x509 certificate using openssl.
+
+Usage: mkx509 FILES_NAME DAYS:365 BYTES:2048 (eg. mkx509 example 1825 4096)
+"
+    days=${2:-365}
+    bytes=${3:-2048}
+
+    openssl genrsa -out "$1.pem" "$bytes"
+    openssl req -new -key "$1.pem" -out "$1.csr"
+    openssl x509 -req -days "$days" -in "$1.csr" -signkey "$1.pem" -out "$1.crt"
+
+    rm "$1.csr"
+}
+###< functions ###
+
+###> ALIASES ###
+alias ip="ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
+
+alias fdir="cd $REPOPATH/heracles"
+alias bdir="cd $REPOPATH/hydra/backend"
+alias ldir="cd $REPOPATH/legacy"
+alias wdir="cd $WANDHOME"
+
+alias dedn="denv down"
+alias desp="denv stop"
+alias dest="denv start"
+alias deup="denv up"
+alias dcmp="dcomposer"
+
+alias k="kubectl"
+###< aliases ###

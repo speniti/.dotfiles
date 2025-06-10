@@ -1,0 +1,63 @@
+#!/usr/bin/env sh
+
+ytdl() {
+    usage="
+Shortcut for yt-dlp.
+
+    - Valid commands are 'single', 'playlist', 'udemy (eg. ytdl playlist ...).
+
+Usage: ytdl [COMMAND] ...ARGS
+"
+    cmds=('single', 'playlist', 'server', 'udemy', 'ultrastar')
+
+    if [[ ! ${cmds[@]} =~ "$1" ]]; then
+        cmd='single'
+    else
+        cmd=$1
+        shift
+    fi
+
+    yt-dlp --config-location "/Users/simone.peniti/.config/youtube-dl/$cmd" $@
+
+}
+
+remove_silence() {
+    usage="
+Trim silence from the beginning and end of a mp3 file using ffmpeg.
+
+Usage: remove_silence INPUT_FILE
+"
+    input=$1
+    mv "$input" "$input-processing.mp3"
+
+    echo "extracting cover from $input..."
+
+    ffmpeg -loglevel error -i "$input-processing.mp3" -y -an -vf "
+        crop=w='min(iw\\,ih)':h='min(iw\\,ih)',scale=640:640,setsar=1
+    " "$input-cover.webp"
+
+    echo "done."
+
+    echo "removing silence from $input..."
+
+    ffmpeg -loglevel error -i "$input-processing.mp3" -i "$input-cover.webp" -map 0:0 -map 1:0 -af "
+        silenceremove=start_periods=1:start_duration=1:start_threshold=-40dB:detection=peak,
+        areverse,
+        silenceremove=start_periods=1:start_duration=1:start_threshold=-40dB:detection=peak,
+        areverse
+    " "$input"
+
+    rm "$input-processing.mp3"
+    rm "$input-cover.webp"
+
+    echo "done."
+}
+
+alias ytdlp="ytdl single --exec 'source ~/.webpieveradio && remove_silence {}'"
+alias ytpls="ytdl playlist"
+alias ytplsp="ytdl playlist --exec 'source ~/.webpieveradio && remove_silence {}'"
+alias ytsrv="ytdl server --exec 'source ~/.webpieveradio && remove_silence {}'"
+alias uydl="ytdl udemy"
+alias usdl="ytdl ultrastar"
+
+alias mp3trim="remove_silence"

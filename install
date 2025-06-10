@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Zsh
+ln -sf $DOTFILES/zsh/zshrc $HOME/.zshrc
+ln -sf $DOTFILES/zsh/command-not-found $HOME/.command-not-found
+ln -sf $DOTFILES/zsh/docebo $HOME/.docebo
+ln -sf $DOTFILES/zsh/yt-dlp $HOME/.yt-dlp
+
+# Starship
+rm -rf $HOME/.config/starship.toml
+ln -s $DOTFILES/starship/starship.toml $HOME/.config/starship.toml
+
+# Neovim
+rm -rf $HOME/.config/nvim
+ln -s $DOTFILES/nvim $HOME/.config/nvim
+
+# Kitty
+rm -rf $HOME/.config/kitty
+ln -s $DOTFILES/kitty $HOME/.config/kitty
+
+# Git
+ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
+# ln -sf $DOTFILES/git/gitignore_global $HOME/.gitignore_global
+
+# Phpactor
+rm -rf $HOME/.config/phpactor
+ln -s $DOTFILES/phpactor $HOME/.config/phpactor
+
+# NVM (Node Version Manager)
+mkdir -p $HOME/.nvm
+ln -sf $DOTFILES/nvm/default-packages $HOME/.nvm/default-packages
+
+# yt-dlp
+rm -rf $HOME/.config/youtube-dl
+ln -s $DOTFILES/youtube-dl $HOME/.config/youtube-dl
+
+# hammerspoon
+rm -rf $HOME/.hammerspoon
+ln -s $DOTFILES/hammerspoon $HOME/.hammerspoon
+
+# Oh My Zsh
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+if ! [ -x "$(command -v starship &> /dev/null)" ]; then
+    mkdir -p "$HOME/.local/bin"
+    BIN_DIR="$HOME/.local/bin" FORCE=1 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+fi

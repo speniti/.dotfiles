@@ -1,0 +1,8 @@
+-x
+-i
+-k
+--audio-format mp3
+--audio-quality 128K
+-o "~/Music/%(playlist)s/%(title)s/%(track)s - %(artist)s.%(ext)s"
+--download-archive ~/Music/ultrastar.txt
+--write-all-thumbnails

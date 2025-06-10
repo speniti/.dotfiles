@@ -1,0 +1,8 @@
+-i
+--all-subs
+--add-metadata
+--embed-thumbnail
+--recode-video mp4
+-o "~/Movies/youtube-dl/%(playlist)s/%(chapter_number)s - %(chapter)s/%(playlist_index)s. %(title)s.%(ext)s"
+--cookies ~/Movies/youtube-dl/cookies.txt
+--download-archive ~/Movies/youtube-dl/archive.txt

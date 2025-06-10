@@ -1,0 +1,14 @@
+[core]
+	autocrlf = input
+[user]
+	name = Simone Peniti
+	email = simone.peniti@docebo.com
+	signingkey = /Users/simone.peniti/.ssh/glee_rsa
+[init]
+	defaultBranch = main
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true

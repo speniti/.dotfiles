@@ -1,0 +1,8 @@
+-x
+-i
+--audio-format mp3
+--audio-quality 128K
+--add-metadata
+--embed-thumbnail
+-o "~/Music/youtube-dl/%(playlist)s/%(track)s_%(artist)s.%(ext)s"
+--download-archive ~/Music/youtube-dl/server_archive.txt
