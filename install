@@ -28,10 +28,6 @@ ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
 rm -rf $HOME/.config/phpactor
 ln -s $DOTFILES/phpactor $HOME/.config/phpactor
 
-# NVM (Node Version Manager)
-mkdir -p $HOME/.nvm
-ln -sf $DOTFILES/nvm/default-packages $HOME/.nvm/default-packages
-
 # yt-dlp
 rm -rf $HOME/.config/youtube-dl
 ln -s $DOTFILES/youtube-dl $HOME/.config/youtube-dl
