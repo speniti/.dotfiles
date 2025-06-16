@@ -63,6 +63,10 @@ hs.hotkey.bind(hyper, "g", function()
 	launchFocusOrHideIDE("GoLand")
 end)
 
+hs.hotkey.bind(hyper, "l", function()
+	launchOrFocusOrHide("org.luanti.luanti", layouts:reasonableSize())
+end)
+
 hs.hotkey.bind(hyper, "m", function()
 	launchOrFocusOrHide("Mail", layouts:twoThirds(layouts:almostMaximized()))
 end)
@@ -76,5 +80,5 @@ hs.hotkey.bind(hyper, "s", function()
 end)
 
 hs.hotkey.bind(hyper, "t", function()
-	launchOrFocusOrHide("kitty", layouts:almostMaximized())
+	launchOrFocusOrHide("Warp", layouts:almostMaximized())
 end)

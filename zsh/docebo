@@ -1,18 +1,5 @@
 #!/usr/bin/env sh
 
-###> VARIABLES ###
-export DEFAULT_SSH_KEY="sp_rsa"
-export MYSQL_DATA_DIR="/tmp/mysql"
-
-export REPOPATH="/Users/simone.peniti/Docebo/Learn"
-export WANDHOME="$REPOPATH/local"
-export GITLAB_TOKEN="glpat-CMRDLJZhJXpyGKYXVNdm"
-
-export DURIN_AWS_SANDBOX_HASH=8j1svhh5la
-export BI_AWS_SANDBOX_HASH=4cju9n10jh
-export BI_AWS_REGION=eu-west-1
-###< variables ###
-
 ### FUNCTIONS ###
 denv() {
     usage="
@@ -32,7 +19,7 @@ Usage: denv COMMAND
     fi
 
     back=$(pwd)
-    cd $WANDHOME
+    cd $REPOPATH/local
 
     if [[ "$1" = "up" ]]; then
         ecr-login
@@ -148,7 +135,7 @@ alias ip="ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[
 alias fdir="cd $REPOPATH/heracles"
 alias bdir="cd $REPOPATH/hydra/backend"
 alias ldir="cd $REPOPATH/legacy"
-alias wdir="cd $WANDHOME"
+alias wdir="cd $REPOPATH/local"
 
 alias dedn="denv down"
 alias desp="denv stop"

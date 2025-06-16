@@ -48,6 +48,7 @@ nah () {
 function tab_name () { echo -ne "\033]0;${PWD/#$HOME/~}\007" }
 precmd_functions+=(tab_name)
 
+source $HOME/.env
 source $HOME/.yt-dlp
 
 ### Funny stuff ###

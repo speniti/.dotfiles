@@ -26,13 +26,21 @@ hs.hotkey.bind({ "ctrl", "alt" }, "c", function()
 	hs.window.focusedWindow():centerOnScreen()
 end)
 
+hs.hotkey.bind({ "ctrl", "alt", "cmd" }, "h", function()
+	hs.window.focusedWindow():setFrame(layouts:leftTwoThirds(layouts:almostMaximized()))
+end)
+
+hs.hotkey.bind({ "ctrl", "alt", "shift" }, "l", function()
+	hs.window.focusedWindow():setFrame(layouts:rightOneThird(layouts:almostMaximized()))
+end)
+
 -- hs.hotkey.bind({ "ctrl", "alt" }, "", function() end)
 
 hs.hotkey.bind({ "alt", "ctrl", "shift" }, "w", function()
 	local screen = hs.screen.primaryScreen()
 
-	local almostMaximized = layouts:almostMaximized(screen)
-	local reasonableSize = layouts:reasonableSize(screen)
+	local almostMaximized = layouts:almostMaximized()
+	local reasonableSize = layouts:reasonableSize()
 
 	hs.layout.apply({
 		{ "Zen", nil, screen, nil, nil, almostMaximized },
