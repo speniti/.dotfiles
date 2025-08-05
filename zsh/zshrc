@@ -9,6 +9,8 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+export ZSH_COMPDUMP="$HOME/.cache/zsh/zcompdump"
+
 plugins=(
   colorize
   cp

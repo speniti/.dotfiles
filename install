@@ -22,11 +22,6 @@ ln -s $DOTFILES/kitty $HOME/.config/kitty
 
 # Git
 ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
-# ln -sf $DOTFILES/git/gitignore_global $HOME/.gitignore_global
-
-# Phpactor
-rm -rf $HOME/.config/phpactor
-ln -s $DOTFILES/phpactor $HOME/.config/phpactor
 
 # yt-dlp
 rm -rf $HOME/.config/youtube-dl

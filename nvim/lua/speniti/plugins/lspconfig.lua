@@ -1,11 +1,9 @@
 return {
 	"neovim/nvim-lspconfig",
-	event = "VeryLazy",
 	dependencies = {
 		"mason-org/mason.nvim",
 		"mason-org/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		"b0o/schemastore.nvim",
 	},
 	config = function()
 		require("mason").setup({
@@ -40,18 +38,18 @@ return {
 			},
 		})
 
-		local capabilities = require("blink.cmp").get_lsp_capabilities()
+		vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 
 		local servers = {
 			cssls = {},
+			dockerls = {},
+			docker_compose_language_service = {},
 			emmet_language_server = {},
 			gh_actions_ls = {},
 			gitlab_ci_ls = {},
-			lua_ls = {
-				runtime = { version = "LuaJIT" },
-				workspace = { checkThirdParty = false },
-				telemetry = { enable = false },
-			},
+			jsonls = {},
+			lua_ls = {},
+			ltex = {},
 			phpactor = {},
 			tailwindcss = {},
 		}
@@ -59,20 +57,12 @@ return {
 		local ensure_installed = vim.tbl_keys(servers or {})
 		vim.list_extend(ensure_installed, { "stylua" })
 
+		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+
 		require("mason-lspconfig").setup({
 			ensure_installed = {},
 			automatic_enable = true,
-			handlers = {
-				function(name)
-					local server = servers[name] or {}
-					server.capabilities = vim.tbl_deep_extend("force", capabilities, server.capabilities or {})
-
-					require("lspconfig")[name].setup(server)
-				end,
-			},
 		})
-
-		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
@@ -81,10 +71,6 @@ return {
 					mode = mode or "n"
 					vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 				end
-
-				map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-				map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
-				map("<leader>gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
 				map("<leader>gr", require("telescope.builtin").lsp_references, "[R]eferences")
 				map("<leader>gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")

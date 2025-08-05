@@ -48,11 +48,23 @@ local function launchFocusOrHideIDE(name)
 end
 
 hs.hotkey.bind(hyper, "b", function()
-	launchOrFocusOrHide("Zen", layouts:almostMaximized())
+	launchOrFocusOrHide("com.brave.Browser", layouts:almostMaximized())
 end)
 
-hs.hotkey.bind(hyper, "c", function()
+local C = hs.hotkey.modal.new(hyper, "c")
+
+C:bind(hyper, "a", function()
+	launchOrFocusOrHide("com.apple.iCal", layouts:reasonableSize())
+	C:exit()
+end)
+
+C:bind(hyper, "o", function()
 	launchOrFocusOrHide("com.microsoft.VSCode", layouts:almostMaximized())
+	C:exit()
+end)
+
+hs.hotkey.bind(hyper, "d", function()
+	launchOrFocusOrHide("Docker Desktop", layouts:reasonableSize())
 end)
 
 hs.hotkey.bind(hyper, "f", function()
@@ -81,4 +93,8 @@ end)
 
 hs.hotkey.bind(hyper, "t", function()
 	launchOrFocusOrHide("Warp", layouts:almostMaximized())
+end)
+
+hs.hotkey.bind(hyper, "z", function()
+	launchOrFocusOrHide("app.zen-browser.zen", layouts:almostMaximized())
 end)
