@@ -7,7 +7,7 @@ return {
 	end,
 	config = function()
 		require("gitlab").setup({
-			statusline = { enabled = true },
+			statusline = { enabled = false },
 			code_suggestions = {
 				auto_filetypes = { "blade", "css", "go", "html", "javascript", "lua", "php", "rust", "typescript" },
 				ghost_text = {

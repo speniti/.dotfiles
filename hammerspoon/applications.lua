@@ -17,7 +17,7 @@ local function launchOrFocusOrHide(name, frame)
 		return application
 	end
 
-	application = hs.application.open(name, 3, true)
+	application = hs.application.open(name, 5, true)
 	application:focusedWindow():setFrame(frame)
 
 	return application
@@ -92,7 +92,7 @@ hs.hotkey.bind(hyper, "s", function()
 end)
 
 hs.hotkey.bind(hyper, "t", function()
-	launchOrFocusOrHide("Warp", layouts:almostMaximized())
+	launchOrFocusOrHide("com.mitchellh.ghostty", layouts:twoThirds(layouts:almostMaximized()))
 end)
 
 hs.hotkey.bind(hyper, "z", function()

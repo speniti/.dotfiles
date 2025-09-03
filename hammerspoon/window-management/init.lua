@@ -36,21 +36,4 @@ end)
 
 -- hs.hotkey.bind({ "ctrl", "alt" }, "", function() end)
 
-hs.hotkey.bind({ "alt", "ctrl", "shift" }, "w", function()
-	local screen = hs.screen.primaryScreen()
-
-	local almostMaximized = layouts:almostMaximized()
-	local reasonableSize = layouts:reasonableSize()
-
-	hs.layout.apply({
-		{ "Zen", nil, screen, nil, nil, almostMaximized },
-		{ "kitty", nil, screen, nil, nil, almostMaximized },
-		{ "GoLand", nil, screen, nil, nil, almostMaximized },
-		{ "PhpStorm", nil, screen, nil, nil, almostMaximized },
-		{ nil, "Welcome to GoLand", screen, nil, nil, reasonableSize },
-		{ nil, "Welcome to PhpStorm", screen, nil, nil, reasonableSize },
-		{ "slack", nil, screen, nil, nil, reasonableSize },
-	})
-end)
-
 return layouts

@@ -27,7 +27,7 @@ return {
 			}, "\n"),
 		})
 
-		require("mini.statusline").setup({ use_icons = true })
+		require("mini.statusline").setup()
 		require("mini.surround").setup()
 
 		vim.keymap.set("n", "\\", "<cmd>lua MiniFiles.open()<CR>", { desc = "Open Mini file explorer" })

@@ -41,17 +41,21 @@ return {
 		vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 
 		local servers = {
+			bashls = {},
 			cssls = {},
 			dockerls = {},
 			docker_compose_language_service = {},
 			emmet_language_server = {},
+			eslint = {},
 			gh_actions_ls = {},
 			gitlab_ci_ls = {},
 			jsonls = {},
 			lua_ls = {},
 			ltex = {},
 			phpactor = {},
+			stylelint_lsp = {},
 			tailwindcss = {},
+			ts_ls = {},
 		}
 
 		local ensure_installed = vim.tbl_keys(servers or {})

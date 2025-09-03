@@ -1,3 +1,6 @@
+# Amazon Q pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
+
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME=""
@@ -35,6 +38,7 @@ export DOCKER_CLI_HINTS='false'
 
 export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 export PATH=$HOME/.composer/vendor/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
 
 eval "$(starship init zsh)"
 
@@ -55,7 +59,6 @@ source $HOME/.yt-dlp
 
 ### Funny stuff ###
 [ ! -f $HOME/.command-not-found ] || source $HOME/.command-not-found
-eval $(thefuck --alias)
 ### Funny stuff ###
 
 ### Node Version Manager ###
@@ -78,13 +81,10 @@ compinit
 
 ### Herd ###
 export PATH="$HOME/Library/Application Support/Herd/bin/":$PATH
+export HERD_PHP_81_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/81/"
 export HERD_PHP_83_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/83/"
 export HERD_PHP_84_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/84/"
 ### Herd ###
 
-# Herd injected PHP 8.4 configuration.
-export HERD_PHP_84_INI_SCAN_DIR="/Users/simone.peniti/Library/Application Support/Herd/config/php/84/"
-
-
-# Herd injected PHP 8.3 configuration.
-export HERD_PHP_83_INI_SCAN_DIR="/Users/simone.peniti/Library/Application Support/Herd/config/php/83/"
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"

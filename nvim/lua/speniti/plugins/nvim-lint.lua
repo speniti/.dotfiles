@@ -7,8 +7,8 @@ return {
 		lint.linters_by_ft = {
 			css = { "stylelint" },
 			php = { "phpstan" },
-			javascript = { "eslint_d" },
-			typescript = { "eslint_d" },
+			javascript = { "eslint" },
+			typescript = { "eslint" },
 		}
 
 		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {

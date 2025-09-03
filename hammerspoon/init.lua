@@ -14,7 +14,7 @@ hs.alert.defaultStyle = {
 	padding = nil,
 }
 
-hs.screen.watcher.newWithActiveScreen(hs.reload)
+hs.screen.watcher.newWithActiveScreen(hs.reload):start()
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "r", hs.reload)
 
 hs.alert("Config re-loaded.")
