@@ -22,6 +22,9 @@ ln -s $DOTFILES/nvim $HOME/.config/nvim
 ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
 generate_git_signing_key
 
+# Keyd
+sudo ln -sf $DOTFILES/keyd/default.conf /etc/keyd/default.conf 
+
 # Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
