@@ -2,12 +2,22 @@ hs.window.animationDuration = 0
 
 local layouts = require("window-management/layouts").new()
 
+local function terminalConfig()
+	local app = hs.window.focusedWindow():application()
+
+	return TERMINALS[app:name()] or TERMINALS[app:bundleID()] or {}
+end
+
 hs.hotkey.bind({ "ctrl", "alt" }, "r", function()
-	hs.window.focusedWindow():setFrame(layouts:reasonableSize())
+	local config = terminalConfig()
+
+	hs.window.focusedWindow():setFrame(layouts:reasonableSize(config.cell, config.padding))
 end)
 
 hs.hotkey.bind({ "ctrl", "alt" }, "return", function()
-	hs.window.focusedWindow():setFrame(layouts:almostMaximized())
+	local config = terminalConfig()
+
+	hs.window.focusedWindow():setFrame(layouts:almostMaximized(config.cell, config.padding))
 end)
 
 hs.hotkey.bind({ "ctrl", "alt" }, "h", function()
@@ -19,7 +29,9 @@ hs.hotkey.bind({ "ctrl", "alt" }, "l", function()
 end)
 
 hs.hotkey.bind({ "ctrl", "alt" }, "t", function()
-	hs.window.focusedWindow():setFrame(layouts:twoThirds(layouts:almostMaximized()))
+	local config = terminalConfig()
+
+	hs.window.focusedWindow():setFrame(layouts:twoThirds(layouts:almostMaximized(), config.cell, config.padding))
 end)
 
 hs.hotkey.bind({ "ctrl", "alt" }, "c", function()

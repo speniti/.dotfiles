@@ -1,14 +1,9 @@
-# Amazon Q pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME=""
 ZSH_DISABLE_COMPFIX="true"
-
 HYPHEN_INSENSITIVE="true"
 ENABLE_CORRECTION="true"
-
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
@@ -29,6 +24,8 @@ zstyle ':omz:plugins:nvm' lazy-cmd eslint prettier typescript
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR='nvim'
+alias vim="nvim"
+
 export LANG=it_IT.UTF-8
 
 export UID="$(id -u)"
@@ -39,6 +36,10 @@ export DOCKER_CLI_HINTS='false'
 export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 export PATH=$HOME/.composer/vendor/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
+
+if [ "$TERMINAL_EMULATOR" = "JetBrains-JediTerm" ]; then
+		export STARSHIP_CONFIG=~$HOME/.config/jetbrains.toml
+fi
 
 eval "$(starship init zsh)"
 
@@ -54,37 +55,13 @@ nah () {
 function tab_name () { echo -ne "\033]0;${PWD/#$HOME/~}\007" }
 precmd_functions+=(tab_name)
 
-source $HOME/.env
 source $HOME/.yt-dlp
 
 ### Funny stuff ###
 [ ! -f $HOME/.command-not-found ] || source $HOME/.command-not-found
 ### Funny stuff ###
 
-### Node Version Manager ###
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-### Node Version Manager ###
-
 ### Docebo ###
 source $HOME/.docebo
 [[ -f "$HOME/Docebo/Learn/local/scripts/.completion/_wand_completion.zsh" ]] && \. "$HOME/Docebo/Learn/local/scripts/.completion/_wand_completion.zsh"
 ### Docebo ###
-
-### Docker ###
-export PATH=$HOME/.docker/bin:$PATH
-fpath=("$HOME/.docker/completions" $fpath)
-autoload -Uz compinit
-compinit
-### Docker ###
-
-### Herd ###
-export PATH="$HOME/Library/Application Support/Herd/bin/":$PATH
-export HERD_PHP_81_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/81/"
-export HERD_PHP_83_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/83/"
-export HERD_PHP_84_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/84/"
-### Herd ###
-
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"

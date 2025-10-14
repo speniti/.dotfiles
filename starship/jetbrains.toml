@@ -1,0 +1,31 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+format = """$directory$git_branch$git_status """
+
+palette = 'rose-pine'
+
+[directory]
+style = "fg:pine"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "fg:foam italic"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:foam italic"
+format = "[($all_status$ahead_behind )]($style)"
+
+[palettes.rose-pine]
+overlay = '#f2e9e1'
+love = '#b4637a'
+gold = '#ea9d34'
+rose = '#d7827e'
+pine = '#286983'
+foam = '#56949f'
+iris = '#907aa9'

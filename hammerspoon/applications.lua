@@ -1,3 +1,10 @@
+TERMINALS = {
+	["com.mitchellh.ghostty"] = {
+		cell = { w = 11, h = 36 },
+		padding = 32,
+	},
+}
+
 local layouts = require("window-management")
 
 hs.application.enableSpotlightForNameSearches(true)
@@ -5,11 +12,12 @@ hs.application.enableSpotlightForNameSearches(true)
 local hyper = { "cmd", "alt", "ctrl", "shift" }
 
 --- It launches or focuses an application, setting the specified dimensions
---- and position or hides it if it is the front-most application.
+--- and position or hides it if is the front-most application.
 ---@param name string
 ---@param frame frame
+---@param hideOthers boolean|nil
 ---@return hs.application|nil
-local function launchOrFocusOrHide(name, frame)
+local function launchOrFocusOrHide(name, frame, hideOthers, watcher)
 	local application = hs.application.frontmostApplication()
 	if application:name() == name or application:bundleID() == name then
 		local _ = application:hide() or application:selectMenuItem("Hide " .. application:name())
@@ -17,34 +25,80 @@ local function launchOrFocusOrHide(name, frame)
 		return application
 	end
 
-	application = hs.application.open(name, 5, true)
-	application:focusedWindow():setFrame(frame)
+	local mustResize = false
 
-	return application
+	if watcher == nil then
+		watcher = hs.application.watcher.new(function(appName, eventType, app)
+			local isTheOne = appName == name or app:bundleID() == name
+
+			if eventType == hs.application.watcher.launching and isTheOne then
+				mustResize = true
+			end
+
+			if eventType == hs.application.watcher.launched and isTheOne then
+				hs.timer.doAfter(0.3, function()
+					app:focusedWindow():setFrame(frame)
+				end)
+
+				watcher:stop()
+			end
+
+			if eventType == hs.application.watcher.activated and isTheOne then
+				if mustResize then
+					app:focusedWindow():setFrame(frame)
+				end
+
+				if hideOthers then
+					hs.eventtap.keyStroke({ "cmd", "alt" }, "h", 200000, app)
+				end
+
+				watcher:stop()
+			end
+		end)
+	end
+
+	watcher:start()
+
+	local running = hs.application.get(name)
+
+	if running then
+		running:activate()
+
+		return running
+	end
+
+	return hs.application.open(name, 3, true)
 end
 
---- It launches or focuses and I.D.E. (eg. PhpStorm, GoLand, etc.), setting
---- the specified dimensions ad position or hides it if it is the
---- afront-mos tpplication.
+--- It launches or focuses and I.D.E. (eg. PhpStorm, GoLand, etc.)
 ---@param name string
----@return hs.application
+---@return hs.application|nil
 local function launchFocusOrHideIDE(name)
-	local application = hs.application.frontmostApplication()
-	if application:name() == name then
-		local _ = application:hide() or application:selectMenuItem("Hide " .. name)
+	local watcher
 
-		return application
-	end
+	watcher = hs.application.watcher.new(function(appName, eventType, app)
+		local isTheOne = appName == name or app:bundleID() == name
 
-	application = hs.application.open(name, 3, true)
+		if eventType == hs.application.watcher.launched and isTheOne then
+			hs.timer.doAfter(0.3, function()
+				if app:focusedWindow():title():match("^Welcome to") then
+					app:focusedWindow():setFrame(layouts:reasonableSize()):centerOnScreen()
+				else
+					app:focusedWindow():setFrame(layouts:almostMaximized())
+				end
+			end)
 
-	if application:focusedWindow():title():match("^Welcome to") then
-		application:focusedWindow():setFrame(layouts:reasonableSize()):centerOnScreen()
-	else
-		application:focusedWindow():setFrame(layouts:almostMaximized())
-	end
+			watcher:stop()
+		end
 
-	return application
+		if eventType == hs.application.watcher.activated and isTheOne then
+			hs.eventtap.keyStroke({ "cmd", "alt" }, "h", 200000, app)
+
+			watcher:stop()
+		end
+	end)
+
+	return launchOrFocusOrHide(name, {}, true, watcher)
 end
 
 hs.hotkey.bind(hyper, "b", function()
@@ -63,20 +117,12 @@ C:bind(hyper, "o", function()
 	C:exit()
 end)
 
-hs.hotkey.bind(hyper, "d", function()
-	launchOrFocusOrHide("Docker Desktop", layouts:reasonableSize())
-end)
-
 hs.hotkey.bind(hyper, "f", function()
 	launchOrFocusOrHide("Finder", layouts:reasonableSize())
 end)
 
 hs.hotkey.bind(hyper, "g", function()
 	launchFocusOrHideIDE("GoLand")
-end)
-
-hs.hotkey.bind(hyper, "l", function()
-	launchOrFocusOrHide("org.luanti.luanti", layouts:reasonableSize())
 end)
 
 hs.hotkey.bind(hyper, "m", function()
@@ -92,7 +138,12 @@ hs.hotkey.bind(hyper, "s", function()
 end)
 
 hs.hotkey.bind(hyper, "t", function()
-	launchOrFocusOrHide("com.mitchellh.ghostty", layouts:twoThirds(layouts:almostMaximized()))
+	local bundleID = "com.mitchellh.ghostty"
+
+	launchOrFocusOrHide(
+		bundleID,
+		layouts:twoThirds(layouts:almostMaximized(), TERMINALS[bundleID].cell, TERMINALS[bundleID].padding)
+	)
 end)
 
 hs.hotkey.bind(hyper, "z", function()

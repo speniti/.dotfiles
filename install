@@ -17,6 +17,14 @@ ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
 rm -rf $HOME/.config/youtube-dl
 ln -s $DOTFILES/yt-dlp $HOME/.config/youtube-dl
 
+# Tmux
+rm -rf $HOME/.tmux.conf
+ln -s $DOTFILES/tmux/tmux.conf $HOME/.tmux.conf
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+fi
+
+
 # hammerspoon
 rm -rf $HOME/.hammerspoon
 ln -s $DOTFILES/hammerspoon $HOME/.hammerspoon
@@ -36,7 +44,9 @@ fi
 
 # Starship
 rm -rf $HOME/.config/starship.toml
+rm -rf $HOME/.config/jetbrains.toml
 ln -s $DOTFILES/starship/starship.toml $HOME/.config/starship.toml
+ln -s $DOTFILES/starship/jetbrains.toml $HOME/.config/jetbrains.toml
 
 if ! command -v starship >/dev/null 2>&1; then
     mkdir -p "$HOME/.local/bin"

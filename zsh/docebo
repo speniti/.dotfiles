@@ -4,13 +4,13 @@ denv() {
 	usage=$(cat <<-END
 			Shortcut for dev environment operations.
 
-			- Valid commands are 'down', 'start', 'stop', 'restart', 'resetdb', 'rebuild', 'up' (eg. denv start).
+			- Valid commands are 'down', 'downup', 'start', 'stop', 'resetdb', 'rebuild', 'up', 'update' (eg. denv start).
 
 			Usage: denv COMMAND
 		END
 	)
 
-	cmds=('down', 'start' 'stop' 'restart', 'resetdb', 'rebuild', 'up')
+	cmds=('down', 'downup', 'start' 'stop' 'resetdb', 'rebuild', 'up', 'update')
 
 	if [[ $# -ne 1 ]] || [[ ! ${cmds[@]} =~ "$1" ]]; then
 		echo $usage
@@ -23,7 +23,6 @@ denv() {
 
 	if [[ "$1" = "up" ]]; then
 		ecr-login
-
 		wand docker-start
 
 		cd $back
@@ -39,9 +38,35 @@ denv() {
 		return 0
 	fi
 
-	if [[ "$1" = "restart" ]]; then
-		wand docker-stop
+	if [[ "$1" = "downup" ]]; then
+		wand docker-remove
+
+		ecr-login
+
 		wand docker-start
+		wand clear-cache
+
+		cd $back
+
+		return 0
+	fi
+
+	if [[ "$1" = "update" ]]; then
+		wand docker-remove
+
+		git fetch
+		git pull --autostash
+
+		wand update-repos
+
+		ecr-login
+		docker-compose build --no-cache
+		
+		wand docker-start
+		wand clear-cache
+
+		dcomposer
+		wand run-migrations
 
 		cd $back
 
@@ -57,13 +82,13 @@ denv() {
 	fi
 
 	if [[ "$1" = "rebuild" ]]; then
-		ecr-login
-
 		wand docker-remove
 
-		docker-compose build --no-cache
+		ecr-login
 
+		docker-compose build --no-cache
 		wand docker-start
+		wand clear-cache
 
 		cd $back
 
@@ -137,6 +162,7 @@ alias ldir="cd $REPOPATH/legacy"
 alias wdir="cd $REPOPATH/local"
 
 alias dedn="denv down"
+alias dedu="denv downup"
 alias desp="denv stop"
 alias dest="denv start"
 alias deup="denv up"
