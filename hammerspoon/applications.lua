@@ -112,8 +112,8 @@ C:bind(hyper, "a", function()
 	C:exit()
 end)
 
-C:bind(hyper, "o", function()
-	launchOrFocusOrHide("com.microsoft.VSCode", layouts:almostMaximized())
+C:bind(hyper, "r", function()
+	launchOrFocusOrHide("com.todesktop.230313mzl4w4u92", layouts:almostMaximized())
 	C:exit()
 end)
 
@@ -133,6 +133,10 @@ hs.hotkey.bind(hyper, "p", function()
 	launchFocusOrHideIDE("PhpStorm")
 end)
 
+hs.hotkey.bind(hyper, "r", function()
+	launchOrFocusOrHide("com.todesktop.230313mzl4w4u92", layouts:almostMaximized())
+end)
+
 hs.hotkey.bind(hyper, "s", function()
 	launchOrFocusOrHide("Slack", layouts:reasonableSize())
 end)
@@ -144,6 +148,10 @@ hs.hotkey.bind(hyper, "t", function()
 		bundleID,
 		layouts:twoThirds(layouts:almostMaximized(), TERMINALS[bundleID].cell, TERMINALS[bundleID].padding)
 	)
+end)
+
+hs.hotkey.bind(hyper, "x", function()
+	launchOrFocusOrHide("com.google.Chrome", layouts:almostMaximized())
 end)
 
 hs.hotkey.bind(hyper, "z", function()

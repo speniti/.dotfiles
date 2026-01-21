@@ -133,7 +133,7 @@ dcomposer() {
 }
 
 ecr-login () {
-		aws sso login 
+	aws sso login 
     token=$(aws ecr get-login-password --region us-east-1)
     docker login --username AWS --password $token 426132435523.dkr.ecr.us-east-1.amazonaws.com
 }
@@ -156,6 +156,27 @@ mkx509 () {
 	rm "$1.csr"
 }
 
+doreilly () {
+	usage=$(cat <<-END
+			Shortcut for downloading the Oreilly books.
+
+			Usage: oreilly BOOK_ID BOOK_NAME (eg. oreilly 1234567890 'Mastering Docebo.epub')
+		END
+	)
+
+	if [[ $# -ne 2 ]]; then
+		echo $usage
+
+		return 1
+	fi
+
+	book_id=$1
+	book_name=$2
+	
+	docker pull kirinnee/orly:latest > /dev/null 2>&1 || true
+	printf '%s\n' "$(pbpaste)" | docker run -i --rm kirinnee/orly:latest sso $book_id > $book_name
+}
+
 alias fdir="cd $REPOPATH/heracles"
 alias bdir="cd $REPOPATH/hydra/backend"
 alias ldir="cd $REPOPATH/legacy"
@@ -167,3 +188,4 @@ alias desp="denv stop"
 alias dest="denv start"
 alias deup="denv up"
 alias dcmp="dcomposer"
+alias dory="doreilly"

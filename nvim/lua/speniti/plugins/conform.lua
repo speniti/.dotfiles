@@ -8,6 +8,7 @@ return {
 			formatters_by_ft = {
 				blade = { "prettier" },
 				css = { "prettier" },
+				go = { "gofmt" },
 				lua = { "stylua" },
 				html = { "prettier" },
 				json = { "prettier" },

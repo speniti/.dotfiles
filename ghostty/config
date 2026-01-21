@@ -7,7 +7,10 @@ font-size = 18
 adjust-cell-height = 50%
 font-thicken = true
 mouse-hide-while-typing = true
+
+cursor-style = block
 cursor-color = #286983
+shell-integration-features = no-cursor
 
 theme = light:Rose Pine Dawn,dark:Rose Pine Moon
 
@@ -20,3 +23,4 @@ macos-titlebar-style = hidden
 macos-option-as-alt = left
 
 confirm-close-surface = false
+keybind = shift+enter=text:\x1b\r

@@ -49,6 +49,7 @@ return {
 			eslint = {},
 			gh_actions_ls = {},
 			gitlab_ci_ls = {},
+			gopls = {},
 			jsonls = {},
 			lua_ls = {},
 			ltex = {},
