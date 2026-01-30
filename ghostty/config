@@ -3,7 +3,7 @@ font-family-bold = "JetBrains NFM SemiBold"
 font-family-italic = "MonaspiceRn NFM"
 font-family-bold-italic = "MonaspiceRn NFM Medium"
 
-font-size = 18
+font-size = 20
 adjust-cell-height = 50%
 font-thicken = true
 mouse-hide-while-typing = true
