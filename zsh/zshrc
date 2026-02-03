@@ -38,7 +38,7 @@ export PATH=$HOME/.composer/vendor/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 
 if [ "$TERMINAL_EMULATOR" = "JetBrains-JediTerm" ]; then
-		export STARSHIP_CONFIG=~$HOME/.config/jetbrains.toml
+    export STARSHIP_CONFIG=~$HOME/.config/jetbrains.toml
 fi
 
 eval "$(starship init zsh)"

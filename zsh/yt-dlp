@@ -53,10 +53,8 @@ Usage: remove_silence INPUT_FILE
     echo "done."
 }
 
-alias ytdlp="ytdl single --exec 'source ~/.webpieveradio && remove_silence {}'"
+alias ytdlp="ytdl single"
 alias ytpls="ytdl playlist"
-alias ytplsp="ytdl playlist --exec 'source ~/.webpieveradio && remove_silence {}'"
-alias ytsrv="ytdl server --exec 'source ~/.webpieveradio && remove_silence {}'"
 alias uydl="ytdl udemy"
 alias usdl="ytdl ultrastar"
 

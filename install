@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 
+OS_NAME=$(uname -s)
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+generate_git_signing_key () {
+	local key_type="${1:-ed25519}"
+	local key_path="$HOME/.ssh/${2:-git}"
+
+	# Skip if key already exists
+	[[ -f "$key_path" ]] && return 0
+
+	ssh-keygen -t "$key_type" -f "$key_path" -N "" -q
+
+	chmod 600 "$key_path"
+	chmod 644 "$key_path.pub"
+
+	git config --global user.signingkey $key_path
+}
 
 # Neovim
 rm -rf $HOME/.config/nvim
@@ -8,38 +24,12 @@ ln -s $DOTFILES/nvim $HOME/.config/nvim
 
 # Ghostty
 rm -rf $HOME/.config/ghostty
-ln -s $DOTFILES/ghostty $HOME/.config/ghostty 
+ln -s $DOTFILES/ghostty $HOME/.config/ghostty
 
 # Git
-ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
-
-# yt-dlp
-rm -rf $HOME/.config/youtube-dl
-ln -s $DOTFILES/yt-dlp $HOME/.config/youtube-dl
-
-# Tmux
-rm -rf $HOME/.tmux.conf
-ln -s $DOTFILES/tmux/tmux.conf $HOME/.tmux.conf
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-fi
-
-
-# hammerspoon
-rm -rf $HOME/.hammerspoon
-ln -s $DOTFILES/hammerspoon $HOME/.hammerspoon
-
-# Zsh
-if [ ! -f "$HOME/.zshrc" ]; then
-    cp "$DOTFILES/zsh/zshrc" "$HOME/.zshrc"
-		ln -sf $DOTFILES/zsh/command-not-found $HOME/.command-not-found
-		ln -sf $DOTFILES/zsh/docebo $HOME/.docebo
-		ln -sf $DOTFILES/zsh/yt-dlp $HOME/.yt-dlp
-fi
-
-# Oh My Zsh
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [[ ! -f "$HOME/.gitconfig" ]]; then
+    generate_git_signing_key
+    ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
 fi
 
 # Starship
@@ -51,4 +41,43 @@ ln -s $DOTFILES/starship/jetbrains.toml $HOME/.config/jetbrains.toml
 if ! command -v starship >/dev/null 2>&1; then
     mkdir -p "$HOME/.local/bin"
     BIN_DIR="$HOME/.local/bin" FORCE=1 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+fi
+
+if [ $OS_NAME = "Darwin" ]; then
+    # hammerspoon
+    rm -rf $HOME/.hammerspoon
+    ln -s $DOTFILES/hammerspoon $HOME/.hammerspoon
+
+    # yt-dlp
+    rm -rf $HOME/.config/youtube-dl
+    ln -s $DOTFILES/yt-dlp $HOME/.config/youtube-dl
+
+    # Zsh
+    if [ ! -f "$HOME/.zshrc" ]; then
+        cp "$DOTFILES/zsh/zshrc" "$HOME/.zshrc"
+    	ln -sf $DOTFILES/zsh/command-not-found $HOME/.command-not-found
+    	ln -sf $DOTFILES/zsh/docebo $HOME/.docebo
+    	ln -sf $DOTFILES/zsh/yt-dlp $HOME/.yt-dlp
+    fi
+
+    # Oh My Zsh
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    fi
+else
+    # Fontconfig
+    rm -rf $HOME/.config/fontconfig
+    ln -s $DOTFILES/fontconfig $HOME/.config/fontconfig
+
+    # Keyd
+    if [[ ! -f "/etc/keyd/default.conf" ]]; then
+        sudo ln -sf $DOTFILES/keyd/default.conf /etc/keyd/default.conf
+    fi
+
+    # Nushell
+    rm -rf $HOME/.config/nushell/config.nu
+    ln -sf $DOTFILES/nushell/config.nu $HOME/.config/nushell/config.nu
+
+    rm -rf $HOME/.config/nushell/autoload
+    ln -s $DOTFILES/nushell/autoload $HOME/.config/nushell/autoload
 fi

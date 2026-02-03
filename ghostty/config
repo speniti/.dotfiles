@@ -1,5 +1,5 @@
-font-family = "JetBrains NFM Medium"
-font-family-bold = "JetBrains NFM SemiBold"
+font-family = "JetBrainsMono NFM Medium"
+font-family-bold = "JetBrainsMono NFM SemiBold"
 font-family-italic = "MonaspiceRn NFM"
 font-family-bold-italic = "MonaspiceRn NFM Medium"
 
@@ -10,7 +10,7 @@ mouse-hide-while-typing = true
 
 cursor-style = block
 cursor-color = #286983
-shell-integration-features = no-cursor
+shell-integration-features = no-cursor,ssh-terminfo,ssh-env,sudo
 
 theme = light:Rose Pine Dawn,dark:Rose Pine Moon
 
@@ -22,5 +22,10 @@ window-save-state = always
 macos-titlebar-style = hidden
 macos-option-as-alt = left
 
+gtk-titlebar = false
+
 confirm-close-surface = false
-keybind = shift+enter=text:\x1b\r
+
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+keybind = super+w=close_surface
