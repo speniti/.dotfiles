@@ -63,7 +63,7 @@ local function screenPortion(portion, frame, cell, padding)
 		end
 
 		geometry.w = geometry.w - w % cell.w
-		geometry.h = geometry.h - h % cell.h
+		geometry.h = geometry.h - h % cell.h + 1
 
 		geometry.x = frame.x + (frame.w - geometry.w) / 2
 		geometry.y = frame.y + (frame.h - geometry.h) / 2

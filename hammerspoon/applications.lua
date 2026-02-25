@@ -1,6 +1,6 @@
 TERMINALS = {
 	["com.mitchellh.ghostty"] = {
-		cell = { w = 11, h = 36 },
+		cell = { w = 12, h = 41 },
 		padding = 32,
 	},
 }
