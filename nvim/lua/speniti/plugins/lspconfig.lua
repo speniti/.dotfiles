@@ -7,7 +7,7 @@ return {
 	},
 	config = function()
 		require("mason").setup({
-			ui = { height = 0.8 },
+			ui = { height = 0.9 },
 		})
 
 		vim.diagnostic.config({
@@ -41,26 +41,22 @@ return {
 		vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 
 		local servers = {
-			bashls = {},
-			cssls = {},
-			dockerls = {},
-			docker_compose_language_service = {},
-			emmet_language_server = {},
-			eslint = {},
-			gh_actions_ls = {},
-			gopls = {},
-			jsonls = {},
-			lua_ls = {},
-			phpactor = {},
-			stylelint_lsp = {},
-			tailwindcss = {},
-			ts_ls = {},
+			"bashls",
+			"cssls",
+			"dockerls",
+			"docker_compose_language_service",
+			"emmet_language_server",
+			"eslint",
+			"gh_actions_ls",
+			"jsonls",
+			"lua_ls",
+			"stylelint_lsp",
+			"ts_ls",
 		}
 
-		local ensure_installed = vim.tbl_keys(servers or {})
-		vim.list_extend(ensure_installed, { "stylua" })
-
-		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+		require("mason-tool-installer").setup({
+			ensure_installed = vim.list_extend(servers, { "stylua" }),
+		})
 
 		require("mason-lspconfig").setup({
 			ensure_installed = {},
@@ -74,14 +70,6 @@ return {
 					mode = mode or "n"
 					vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 				end
-
-				-- map("<leader>gr", require("telescope.builtin").lsp_references, "[R]eferences")
-				-- map("<leader>gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-				-- map("<leader>gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-				-- map("<leader>gt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
-
-				-- map("<leader>O", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-				-- map("<leader>W", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
 
 				local client = vim.lsp.get_client_by_id(event.data.client_id)
 

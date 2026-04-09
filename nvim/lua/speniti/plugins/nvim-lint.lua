@@ -6,7 +6,6 @@ return {
 
 		lint.linters_by_ft = {
 			css = { "stylelint" },
-			php = { "phpstan" },
 			javascript = { "eslint" },
 			typescript = { "eslint" },
 		}

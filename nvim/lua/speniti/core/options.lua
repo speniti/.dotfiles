@@ -27,6 +27,7 @@ vim.o.colorcolumn = "120"
 vim.o.cmdheight = 0
 vim.o.list = true
 vim.opt.listchars = { tab = "  ", trail = "·", nbsp = "␣" }
+vim.opt.fillchars = { eob = " " }
 vim.o.inccommand = "split"
 
 -- file handling

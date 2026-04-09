@@ -6,15 +6,12 @@ return {
 
 		conform.setup({
 			formatters_by_ft = {
-				blade = { "prettier" },
 				css = { "prettier" },
-				go = { "gofmt" },
 				lua = { "stylua" },
 				html = { "prettier" },
 				json = { "prettier" },
 				javascript = { "prettier" },
 				markdown = { "prettier" },
-				php = { "pint" },
 				typescript = { "prettier" },
 				yaml = { "prettier" },
 			},
@@ -22,6 +19,7 @@ return {
 				async = false,
 				lsp_fallback = true,
 			},
+			notify_no_formatters = false,
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>cf", function()

@@ -8,6 +8,7 @@ return {
 		require("mini.extra").setup()
 		require("mini.files").setup()
 		require("mini.git").setup()
+		require("mini.icons").setup()
 		require("mini.indentscope").setup()
 
 		require("mini.notify").setup({

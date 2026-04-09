@@ -26,6 +26,7 @@ return {
 				"lua",
 				"make",
 				"markdown",
+				"markdown_inline",
 				"passwd",
 				"phpdoc",
 				"php",
