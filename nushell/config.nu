@@ -8,6 +8,9 @@ alias la = ls -la
 alias vim = nvim
 
 path add "~/.local/bin"
+path add "~/.luarocks/bin/"
+path add "~/.composer/vendor/bin/"
+path add "~/.npm/bin/"
 
 if ($env.TERMINAL_EMULATOR? == "JetBrains-JediTerm") {
     $env.STARSHIP_CONFIG = $"($env.HOME)/.config/jetbrains.toml"

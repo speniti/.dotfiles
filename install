@@ -75,9 +75,6 @@ else
     fi
 
     # Nushell
-    rm -rf $HOME/.config/nushell/config.nu
-    ln -sf $DOTFILES/nushell/config.nu $HOME/.config/nushell/config.nu
-
-    rm -rf $HOME/.config/nushell/autoload
-    ln -s $DOTFILES/nushell/autoload $HOME/.config/nushell/autoload
+    rm -rf $HOME/.config/nushell
+    ln -s $DOTFILES/nushell $HOME/.config/nushell
 fi
