@@ -31,7 +31,14 @@ for arg in "$@"; do
     fi
 done
 
-docker run --rm -it --network host \
+# Detect if we have a TTY
+if [ -t 0 ]; then
+    TTY_FLAG="-it"
+else
+    TTY_FLAG="-i"
+fi
+
+docker run --rm $TTY_FLAG --network host \
     -v "{{HOME}}/.composer:/.composer" \
     -v "$(pwd):$(pwd)" \
     -v /etc/passwd:/etc/passwd:ro \

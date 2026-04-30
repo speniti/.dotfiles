@@ -40,6 +40,14 @@ return {
 
 		vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 
+		vim.lsp.config["phpantom"] = {
+			cmd = { "/usr/bin/phpantom_lsp" },
+			filetypes = { "php" },
+			root_markers = { "composer.json", ".git" },
+		}
+
+		vim.lsp.enable("phpantom")
+
 		local servers = {
 			"bashls",
 			"cssls",

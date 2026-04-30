@@ -12,11 +12,12 @@ return {
 				json = { "prettier" },
 				javascript = { "prettier" },
 				markdown = { "prettier" },
+				php = { "pint" },
 				typescript = { "prettier" },
 				yaml = { "prettier" },
 			},
-			format_on_save = {
-				async = false,
+			format_after_save = {
+				timeout_ms = 3000,
 				lsp_fallback = true,
 			},
 			notify_no_formatters = false,

@@ -13,9 +13,15 @@ def rootless [] {
     ]
 }
 
+# Check if we're running in a TTY
+def is-tty [] {
+    (tty -s | complete | get exit_code) == 0
+}
+
 # Get common Docker flags for all container runs
 def common [] {
-    ([ --rm -it --network host -v ($env.PWD):/app -w /app ] | append (rootless))
+    let interactive = if (is-tty) { [-it] } else { [-i] }
+    ([ --rm --network host -v ($env.PWD):/app -w /app ] | append $interactive | append (rootless))
 }
 
 # Generate or update the Node wrapper script
@@ -23,10 +29,13 @@ def common [] {
 # @param --force Force regeneration even if version hasn't changed
 def wrap-node [--force] {
     let stub_path = $'($env.HOME)/Code/.dotfiles/nushell/autoload/containers/stubs/node-wrapper.bash'
+    let npm_stub_path = $'($env.HOME)/Code/.dotfiles/nushell/autoload/containers/stubs/npm-wrapper.bash'
     let current_version = $'($node_config.image):($node_config.version)'
 
     let bin_dir = [$env.HOME .local bin] | path join
     let bin_path = $bin_dir | path join 'node'
+    let npm_bin_path = $bin_dir | path join 'npm'
+    let npx_bin_path = $bin_dir | path join 'npx'
     let version_marker = $bin_dir | path join '.node-version'
 
     let version_changed = if ($version_marker | path exists) {
@@ -38,6 +47,7 @@ def wrap-node [--force] {
     if $should_create {
         ^mkdir -p $bin_dir | ignore
 
+        # Create node wrapper
         let script = open $stub_path
             | str replace --all '{{HOME}}' $"($env.HOME)"
             | str replace --all '{{IMAGE}}' $node_config.image
@@ -45,6 +55,18 @@ def wrap-node [--force] {
 
         $script | save -f $bin_path
         ^chmod +x $bin_path
+
+        # Create npm wrapper
+        let npm_script = open $npm_stub_path
+            | str replace --all '{{HOME}}' $"($env.HOME)"
+            | str replace --all '{{IMAGE}}' $node_config.image
+            | str replace --all '{{VERSION}}' $node_config.version
+
+        $npm_script | save -f $npm_bin_path
+        ^chmod +x $npm_bin_path
+
+        # Create npx symlink to npm wrapper
+        ^ln -sf $npm_bin_path $npx_bin_path
 
         $current_version | save -f $version_marker
     }
