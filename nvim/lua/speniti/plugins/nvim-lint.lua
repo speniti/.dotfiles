@@ -1,13 +1,12 @@
 return {
 	"mfussenegger/nvim-lint",
-	events = { "BufReadPre", "BufNewFile" },
 	config = function()
 		local lint = require("lint")
 
 		lint.linters_by_ft = {
 			css = { "stylelint" },
 			javascript = { "eslint" },
-			-- php = { "phpstan" },
+			php = { "phpstan" },
 			typescript = { "eslint" },
 		}
 
