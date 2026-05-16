@@ -12,8 +12,8 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" }
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half page down (centered)" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 
--- delete without yanking
-vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yanking" })
+-- delete without yanking (disabled: <leader>d prefix used by DAP)
+-- vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yanking" })
 
 -- buffer navigation
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Next buffer" })

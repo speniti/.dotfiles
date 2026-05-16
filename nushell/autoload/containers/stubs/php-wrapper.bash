@@ -40,9 +40,9 @@ fi
 
 docker run --rm $TTY_FLAG --network host \
     -v "{{HOME}}/.composer:/.composer" \
-    -v "$(pwd):$(pwd)" \
+    -v "$(pwd):/app" \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
     --user "$(id -u):$(id -g)" \
-    -w "$(pwd)" \
+    -w "/app" \
     {{IMAGE}}:{{VERSION}} php "${ARGS[@]}"

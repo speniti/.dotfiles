@@ -63,7 +63,7 @@ return {
 		}
 
 		require("mason-tool-installer").setup({
-			ensure_installed = vim.list_extend(servers, { "stylua" }),
+			ensure_installed = vim.list_extend(servers, { "stylua", "php-debug-adapter" }),
 		})
 
 		require("mason-lspconfig").setup({
