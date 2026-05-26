@@ -15,7 +15,11 @@ def rootless [] {
 
 # Get common Docker flags for all container runs
 def common [] {
-    ([ --rm -it --network host -v ($env.PWD):/app -w /app ] | append (rootless))
+    let base = [ --rm -it --network host -v ($env.PWD):/app -w /app ] | append (rootless)
+
+    if 'XDEBUG_TRIGGER' not-in $env { return $base }
+
+    $base | append [ --env XDEBUG_TRIGGER=$env.XDEBUG_TRIGGER ]
 }
 
 # Generate or update the PHP wrapper script

@@ -38,7 +38,14 @@ else
     TTY_FLAG="-i"
 fi
 
+# Pass XDEBUG_TRIGGER if set
+XDEBUG_FLAGS=()
+if [ -n "${XDEBUG_TRIGGER:-}" ]; then
+    XDEBUG_FLAGS=(-e "XDEBUG_TRIGGER=$XDEBUG_TRIGGER")
+fi
+
 docker run --rm $TTY_FLAG --network host \
+    "${XDEBUG_FLAGS[@]}" \
     -v "{{HOME}}/.composer:/.composer" \
     -v "$(pwd):/app" \
     -v /etc/passwd:/etc/passwd:ro \
